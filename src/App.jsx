@@ -19,7 +19,7 @@ export default function App() {
   return (
     <>
       <div className="grid gap-0 min-h-svh">
-        <Header />
+        <Header cart = {cart} />
         <Outlet
           context={{
             collectionData: [collection, setCollection],

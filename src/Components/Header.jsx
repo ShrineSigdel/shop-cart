@@ -1,9 +1,9 @@
 import Navigation from "./Navigation";
 
-const Header = () => {
+const Header = ({cart}) => {
   return (
     <header className="">
-      <Navigation />
+      <Navigation cart={cart}/>
     </header>
   );
 };
