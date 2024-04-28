@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import NoItem from "../Components/NoItem";
 import { useOutletContext } from "react-router-dom";
 import Button from "../Components/Button";
@@ -9,8 +9,8 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 const Cart = () => {
   const { cartData } = useOutletContext();
   const [cart, setCart] = cartData;
-  const totalAmount =
-    cart.length > 0
+  const totalAmount = useMemo(() => {
+    return cart.length > 0
       ? cart.reduce(
           (prev, curr) =>
             parseFloat(
@@ -21,8 +21,12 @@ const Cart = () => {
           0
         )
       : 0;
-  const totalCount =
-    cart.length > 0 ? cart.reduce((prev, curr) => prev + curr.count, 0) : 0;
+  }, [cart]);
+  const totalCount = useMemo(() => {
+    return cart.length > 0
+      ? cart.reduce((prev, curr) => prev + curr.count, 0)
+      : 0;
+  }, [cart]);
 
   function clearTheCart() {
     setCart([]);
