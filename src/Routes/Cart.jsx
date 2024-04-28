@@ -9,6 +9,7 @@ import { faCartShopping } from "@fortawesome/free-solid-svg-icons";
 const Cart = () => {
   const { cartData } = useOutletContext();
   const [cart, setCart] = cartData;
+
   const totalAmount = useMemo(() => {
     return cart.length > 0
       ? cart.reduce(
@@ -22,6 +23,7 @@ const Cart = () => {
         )
       : 0;
   }, [cart]);
+
   const totalCount = useMemo(() => {
     return cart.length > 0
       ? cart.reduce((prev, curr) => prev + curr.count, 0)
@@ -40,6 +42,31 @@ const Cart = () => {
     localStorage.setItem("CART", JSON.stringify(cart));
   }, [cart]);
 
+  function incrementCount(id) {
+    setCart((prevCart) => {
+      return prevCart.map((item) => {
+        if (item.id === id) {
+          return { ...item, count: item.count + 1 };
+        }
+        return item;
+      });
+    });
+  }
+
+function decrementCount(id) {
+  setCart((prevCart) => {
+    return prevCart.map((item) => {
+      if (item.id === id) {
+        const updatedCount = item.count - 1;
+        if (updatedCount === 0) {
+          return null; 
+        }
+        return { ...item, count: updatedCount };
+      }
+      return item;
+    }).filter(Boolean); 
+  });
+}
   return (
     <section className="flex flex-col mt-0">
       {cart.length > 0 ? (
@@ -65,7 +92,7 @@ const Cart = () => {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-5 w-full justify-items-center content-center  p-6 pt-10 md:px-8 xl:px-16 2xl:px-32 ">
             {cart.map((item) => (
-              <CartCard key={item.id} {...item} />
+              <CartCard key={item.id} item = {item} incrementCount = {incrementCount} decrementCount = {decrementCount} />
             ))}
           </div>
         </>
